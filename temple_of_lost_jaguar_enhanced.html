@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Temple of the Lost Jaguar - Enhanced</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		body {
+			font-family: Georgia, serif;
+			background-color: #1a1410;
+			color: #d4c5b5;
+			line-height: 1.6;
+			overflow: hidden;
+			background-image:
+				url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='900'%3E%3Cdefs%3E%3ClinearGradient id='stoneBg' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233a2f28;stop-opacity:1' /%3E%3Cstop offset='25%25' style='stop-color:%232a2218;stop-opacity:1' /%3E%3Cstop offset='50%25' style='stop-color:%231a1410;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%230f0c09;stop-opacity:1' /%3E%3C/linearGradient%3E%3Cfilter id='stoneTex'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.03' numOctaves='5' result='noise' /%3E%3CfeDisplacementMap in='SourceGraphic' in2='noise' scale='40' xChannelSelector='R' yChannelSelector='G' /%3E%3C/filter%3E%3C/defs%3E%3Crect width='1600' height='900' fill='url(%23stoneBg)' /%3E%3Crect x='0' y='150' width='200' height='150' fill='%23453630' opacity='0.4' /%3E%3Crect x='200' y='0' width='180' height='200' fill='%23523f33' opacity='0.35' /%3E%3Crect x='1200' y='250' width='220' height='180' fill='%23453630' opacity='0.3' /%3E%3Crect x='1400' y='500' width='200' height='200' fill='%23523f33' opacity='0.4' /%3E%3Cpath d='M 100 0 Q 150 200 80 400 T 120 800' stroke='%235a4a3a' stroke-width='8' fill='none' opacity='0.25' /%3E%3Cpath d='M 1500 50 Q 1450 250 1520 500 T 1480 900' stroke='%235a4a3a' stroke-width='10' fill='none' opacity='0.2' /%3E%3Cpath d='M 300 0 Q 320 150 290 350 T 330 850' stroke='%234a3a2a' stroke-width='6' fill='none' opacity='0.2' /%3E%3Crect x='100' y='600' width='300' height='8' fill='%23d4a574' opacity='0.15' /%3E%3Crect x='1200' y='450' width='250' height='6' fill='%23d4a574' opacity='0.12' /%3E%3Ccircle cx='200' cy='200' r='200' fill='%23d4a574' opacity='0.08' /%3E%3Ccircle cx='1400' cy='700' r='250' fill='%23d4a574' opacity='0.06' /%3E%3Ccircle cx='800' cy='450' r='300' fill='%23d4a574' opacity='0.03' /%3E%3Crect width='1600' height='900' fill='%23000000' opacity='0.1' filter='url(%23stoneTex)' /%3E%3Cpath d='M 0 250 L 400 280 L 800 260 L 1200 290 L 1600 270' stroke='%23000000' stroke-width='1' fill='none' opacity='0.1' /%3E%3Cpath d='M 0 500 Q 400 480 800 520 T 1600 500' stroke='%23000000' stroke-width='1.5' fill='none' opacity='0.08' /%3E%3C/svg%3E"),
+				linear-gradient(180deg, rgba(58, 47, 40, 0.8) 0%, rgba(42, 34, 24, 0.8) 50%, rgba(15, 12, 9, 0.8) 100%);
+			background-size: cover, cover;
+			background-attachment: fixed;
+		}
+
+		#story {
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			padding: 40px 60px;
+			width: 100%;
+			background: transparent;
+			position: relative;
+		}
+
+		#header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 20px;
+			position: relative;
+			z-index: 10;
+		}
+
+		#difficulty-selector {
+			background-color: rgba(212, 165, 116, 0.3);
+			border: 2px solid #d4a574;
+			padding: 8px 16px;
+			color: #d4c5b5;
+			border-radius: 4px;
+			cursor: pointer;
+			font-family: Georgia, serif;
+			font-size: 0.9em;
+		}
+
+		.stats {
+			display: flex;
+			gap: 20px;
+			font-size: 0.95em;
+		}
+
+		.stat-item {
+			background-color: rgba(212, 165, 116, 0.15);
+			padding: 8px 12px;
+			border-radius: 4px;
+			border-left: 3px solid #d4a574;
+		}
+
+		h1 {
+			color: #d4a574;
+			font-size: 2.5em;
+			margin-bottom: 20px;
+			text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+			animation: slideIn 0.6s ease-out;
+		}
+
+		@keyframes slideIn {
+			from {
+				opacity: 0;
+				transform: translateY(-20px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		.passage-text {
+			font-size: 1.1em;
+			margin-bottom: 30px;
+			color: #e8d9c8;
+			min-height: 80px;
+		}
+
+		.char {
+			animation: textReveal 0.03s ease-out forwards;
+		}
+
+		@keyframes textReveal {
+			from {
+				opacity: 0;
+			}
+			to {
+				opacity: 1;
+			}
+		}
+
+		.language-challenge {
+			background-color: rgba(212, 165, 116, 0.15);
+			border-left: 4px solid #d4a574;
+			padding: 15px;
+			margin: 20px 0;
+			border-radius: 4px;
+			font-style: italic;
+			animation: slideIn 0.6s ease-out 0.2s both;
+		}
+
+		.choices {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			margin-top: 30px;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.5s ease-in-out;
+		}
+
+		.choices.revealed {
+			opacity: 1;
+			pointer-events: auto;
+		}
+
+		.choice {
+			padding: 12px 20px;
+			background-color: rgba(212, 165, 116, 0.3);
+			border: 2px solid #d4a574;
+			color: #d4c5b5;
+			cursor: pointer;
+			border-radius: 4px;
+			text-align: left;
+			font-size: 1em;
+			transition: all 0.3s;
+			font-family: Georgia, serif;
+			animation: slideIn 0.5s ease-out forwards;
+		}
+
+		.choice:nth-child(1) { animation-delay: 0.6s; }
+		.choice:nth-child(2) { animation-delay: 0.75s; }
+		.choice:nth-child(3) { animation-delay: 0.9s; }
+
+		.choice:hover {
+			background-color: rgba(212, 165, 116, 0.6);
+			transform: translateX(8px);
+			box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
+		}
+
+		.choice:disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+		}
+
+		.challenge-btn {
+			padding: 8px 12px;
+			margin: 5px 0;
+			background-color: rgba(212, 165, 116, 0.4);
+			border: 1px solid #d4a574;
+			color: #d4c5b5;
+			cursor: pointer;
+			border-radius: 3px;
+			font-family: Georgia, serif;
+			transition: all 0.3s;
+			text-align: left;
+		}
+
+		.challenge-btn:hover {
+			background-color: rgba(212, 165, 116, 0.6);
+			transform: scale(1.05);
+		}
+
+		.challenge-btn:disabled {
+			cursor: not-allowed;
+		}
+
+		.challenge-btn.correct {
+			background-color: rgba(76, 175, 80, 0.6);
+			border-color: #4CAF50;
+			animation: pulse 0.6s ease-out;
+		}
+
+		.challenge-btn.incorrect {
+			background-color: rgba(244, 67, 54, 0.6);
+			border-color: #F44336;
+			animation: shake 0.4s;
+		}
+
+		@keyframes pulse {
+			0%, 100% { transform: scale(1); }
+			50% { transform: scale(1.1); }
+		}
+
+		@keyframes shake {
+			0%, 100% { transform: translateX(0); }
+			25% { transform: translateX(-5px); }
+			75% { transform: translateX(5px); }
+		}
+
+		.feedback {
+			margin-top: 10px;
+			padding: 10px;
+			border-radius: 3px;
+			font-weight: bold;
+			animation: slideIn 0.4s ease-out;
+		}
+
+		.feedback.correct {
+			background-color: rgba(76, 175, 80, 0.3);
+			color: #81C784;
+		}
+
+		.feedback.incorrect {
+			background-color: rgba(244, 67, 54, 0.3);
+			color: #EF5350;
+		}
+
+		/* Particle effects */
+		.particle {
+			position: fixed;
+			pointer-events: none;
+			font-size: 2em;
+			animation: float 1s ease-out forwards;
+		}
+
+		@keyframes float {
+			0% {
+				opacity: 1;
+				transform: translateY(0) translateX(0);
+			}
+			100% {
+				opacity: 0;
+				transform: translateY(-100px) translateX(var(--tx, 0));
+			}
+		}
+
+		/* Modal for difficulty selection */
+		#difficulty-modal {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: rgba(0, 0, 0, 0.7);
+			z-index: 100;
+			justify-content: center;
+			align-items: center;
+		}
+
+		#difficulty-modal.show {
+			display: flex;
+		}
+
+		.modal-content {
+			background-color: #2d2420;
+			border: 2px solid #d4a574;
+			padding: 40px;
+			border-radius: 8px;
+			text-align: center;
+			max-width: 400px;
+		}
+
+		.modal-content h2 {
+			color: #d4a574;
+			margin-bottom: 20px;
+			font-size: 1.8em;
+		}
+
+		.difficulty-btn {
+			display: block;
+			width: 100%;
+			padding: 12px;
+			margin: 10px 0;
+			background-color: rgba(212, 165, 116, 0.3);
+			border: 2px solid #d4a574;
+			color: #d4c5b5;
+			cursor: pointer;
+			border-radius: 4px;
+			font-size: 1.1em;
+			font-family: Georgia, serif;
+			transition: all 0.3s;
+		}
+
+		.difficulty-btn:hover {
+			background-color: rgba(212, 165, 116, 0.6);
+			transform: scale(1.05);
+		}
+
+		/* Achievement badges */
+		.achievements {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			z-index: 50;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.achievement {
+			background-color: rgba(212, 165, 116, 0.4);
+			border: 2px solid #d4a574;
+			padding: 8px 12px;
+			border-radius: 4px;
+			font-size: 0.9em;
+			animation: slideIn 0.5s ease-out;
+		}
+
+		.achievement-icon {
+			font-size: 1.2em;
+			margin-right: 5px;
+		}
+
+		/* Progress bar */
+		#progress-bar {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			height: 4px;
+			background-color: #d4a574;
+			transition: width 0.3s ease;
+			z-index: 5;
+		}
+
+		#passage {
+			position: relative;
+			z-index: 1;
+			flex: 1;
+			overflow-y: auto;
+		}
+
+		#passage::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		#passage::-webkit-scrollbar-track {
+			background: rgba(255,255,255,0.1);
+		}
+
+		#passage::-webkit-scrollbar-thumb {
+			background: #d4a574;
+			border-radius: 4px;
+		}
+	</style>
+</head>
+<body>
+	<div id="difficulty-modal" class="show">
+		<div class="modal-content">
+			<h2>⚔️ Choose Your Difficulty</h2>
+			<button class="difficulty-btn" onclick="startGame('easy')">🌟 Easy - Hints Provided</button>
+			<button class="difficulty-btn" onclick="startGame('normal')">⚡ Normal - Standard Challenge</button>
+			<button class="difficulty-btn" onclick="startGame('hard')">🔥 Hard - No Hints</button>
+		</div>
+	</div>
+
+	<div id="story">
+		<div id="header">
+			<h1 id="main-title" style="margin: 0; font-size: 1.8em;">Temple of the Lost Jaguar</h1>
+			<div class="stats">
+				<div class="stat-item">✓ Correct: <span id="correct-count">0</span></div>
+				<div class="stat-item">📍 Progress: <span id="progress-count">0</span>%</div>
+			</div>
+		</div>
+		<div id="passage"></div>
+		<div class="achievements" id="achievements"></div>
+	</div>
+
+	<div id="progress-bar"></div>
+
+	<script>
+		// Game state
+		let gameState = {
+			currentPassage: "start",
+			currentChallenge: null,
+			correctAnswers: 0,
+			totalChallenges: 0,
+			difficulty: 'normal',
+			achievements: [],
+			visitedPassages: new Set()
+		};
+
+		const passages = {
+			start: {
+				title: "Temple of the Lost Jaguar",
+				text: `You are Dr. Alex Rivers, an archaeologist. For five years, you have been searching for the Temple of the Lost Jaguar – a legendary Mayan temple hidden in the Brazilian rainforest.\n\nToday, you finally have discovered an ancient map in a museum in Rio de Janeiro. Your excitement is enormous! The map shows the temple's location clearly marked.\n\nYou arrive at the jungle with your team. The expedition begins at dawn, and you must make your first decision...`,
+				choices: [
+					{ text: "👤 Follow the native guide (he seems trustworthy)", next: "guide_choice" },
+					{ text: "📱 Trust your GPS technology instead", next: "gps_choice" }
+				]
+			},
+
+			guide_choice: {
+				title: "Following the Guide",
+				text: `You decide to trust the guide, a local man named Marcelo who knows the jungle well.\n\n"I have worked in this forest since I was a child," he says confidently.\n\nAfter two hours of walking through dense vegetation, Marcelo suddenly stops and points ahead. You see three paths cutting through the jungle...`,
+				choices: [
+					{ text: "🛤️ Take the path on the left", next: "left_path" },
+					{ text: "🛤️ Take the middle path", next: "middle_path" }
+				]
+			},
+
+			gps_choice: {
+				title: "The Technology Route",
+				text: `You ignore Marcelo's advice and follow your GPS coordinates instead.\n\nHowever, after two hours, you realize the GPS isn't working properly – the signal is too weak in the jungle.\n\nMarcelo looks worried. "We should turn back," he suggests.\n\nBut then you notice something: ancient stone carvings on the trees! You're on the right path after all!`,
+				choices: [
+					{ text: "✨ Continue following the carvings", next: "carvings_path" },
+					{ text: "🔄 Go back and trust Marcelo's guidance", next: "guide_redemption" }
+				]
+			},
+
+			left_path: {
+				title: "The Left Path",
+				text: `The left path is narrow and overgrown. Strange sounds echo through the darkness.\n\nAfter 30 minutes, your team arrives at an ancient bridge made of stone. It's beautiful but looks very dangerous.\n\nMarcelo says: "The bridge has stood here for 500 years. It has survived many earthquakes."`,
+				challenge: {
+					type: "grammar",
+					instruction: "Which sentence is GRAMMATICALLY CORRECT?",
+					hint: "Think about Present Perfect tense (has/have + past participle)",
+					options: [
+						"A) The bridge has stood here for 500 years.",
+						"B) The bridge is stood here for 500 years.",
+						"C) The bridge stood here for 500 years ago."
+					],
+					correct: 0,
+					explanation: "Correct! Present Perfect (has + past participle) is used for something that started in the past and continues to the present."
+				},
+				choices: [
+					{ text: "🌉 Cross the ancient bridge carefully", next: "bridge_cross" },
+					{ text: "🚶 Search for an alternative route", next: "alternative_route" }
+				]
+			},
+
+			middle_path: {
+				title: "The Hidden Waterfall",
+				text: `The middle path leads to a beautiful hidden waterfall. The water sparkles in the sunlight.\n\n"This is unusual," Marcelo says with surprise. "The water should not be here during this season."\n\nYour team discovers a hidden cave behind the waterfall. Could this be a secret entrance to the temple?`,
+				challenge: {
+					type: "vocabulary",
+					instruction: "Complete the sentence: 'Despite the danger, we decided to _____ the water.'",
+					hint: "What verb means to move from one side of something to the other?",
+					options: [
+						"A) cross",
+						"B) pass",
+						"C) go"
+					],
+					correct: 0,
+					explanation: "Correct! 'Cross' is the correct verb when moving from one side of water to the other."
+				},
+				choices: [
+					{ text: "💧 Wade across the water to explore the cave", next: "cave_discovery" },
+					{ text: "⛺ Set up camp and explore tomorrow", next: "camp_night" }
+				]
+			},
+
+			carvings_path: {
+				title: "The Ancient Signs",
+				text: `The stone carvings are unmistakable – you've found an ancient Mayan pathway!\n\nYour heart races. After so many years of searching, you're finally close.\n\nThe carvings show images of a jaguar and a pyramid. According to the legend, the jaguar is a protective spirit.\n\nThe path splits into two directions. One way has fresh carvings; the other has weathered, very old ones.`,
+				challenge: {
+					type: "collocation",
+					instruction: "Complete the sentence: 'We must _____ the risks if we want to discover the truth.'",
+					hint: "This is a common collocation: ____ risks",
+					options: [
+						"A) take",
+						"B) make",
+						"C) do"
+					],
+					correct: 0,
+					explanation: "Correct! 'Take risks' is the common collocation in English."
+				},
+				choices: [
+					{ text: "🦁 Follow the ancient, weathered path", next: "temple_entrance" },
+					{ text: "✨ Take the path with fresher carvings", next: "wrong_turn" }
+				]
+			},
+
+			guide_redemption: {
+				title: "Trusting Experience",
+				text: `You decide to trust Marcelo after all. His years of experience in the jungle are valuable.\n\n"Thank you for listening," he says with relief. He leads you back to a proper trail.\n\nWithin an hour, you spot the unmistakable architecture of a Mayan pyramid rising above the trees.\n\n"The temple..." you whisper in awe.\n\nYou've done it. You found the Temple of the Lost Jaguar!`,
+				choices: [
+					{ text: "🏛️ Begin exploring the temple", next: "success_ending" }
+				]
+			},
+
+			bridge_cross: {
+				title: "Crossing the Bridge",
+				text: `You take a deep breath and lead your team across the ancient stone bridge.\n\nWith each step, small stones fall below. Your legs are trembling, but you must continue.\n\nHalfway across, you hear a loud CRACK. Part of the bridge begins to crumble!\n\n"Run!" you shout.\n\nYour team runs. Just as the last person reaches the other side, the bridge collapses behind you.\n\nBut you made it! And ahead, through the trees, you see something incredible...`,
+				challenge: {
+					type: "grammar",
+					instruction: "Complete the sentence: 'If we _____ faster, we would have been trapped.'",
+					hint: "This is a Third Conditional: If + past perfect...",
+					options: [
+						"A) hadn't run",
+						"B) didn't run",
+						"C) wouldn't run"
+					],
+					correct: 0,
+					explanation: "Correct! This is a Third Conditional for impossible past situations."
+				},
+				choices: [
+					{ text: "🏛️ Continue forward to the temple", next: "temple_entrance" }
+				]
+			},
+
+			alternative_route: {
+				title: "Finding Another Way",
+				text: `You decide the bridge is too risky. Your team searches for an alternative route.\n\nAfter an hour of difficult climbing, you discover ancient stone steps carved directly into the mountainside!\n\nThese steps lead upward into the jungle canopy. This must be the original pathway to the temple.\n\nAt the top of the stairs, you see the silhouette of a large pyramid against the sunset.`,
+				choices: [
+					{ text: "🔝 Climb to the temple at the top", next: "temple_entrance" }
+				]
+			},
+
+			cave_discovery: {
+				title: "Inside the Cave",
+				text: `You wade across the cool water and enter the cave. Your flashlight reveals spectacular stalactites and stalagmites.\n\nBut then – incredible! – you see paintings on the cave walls. These are ancient Mayan paintings!\n\nThe paintings show a jaguar guarding a pyramid. They show people bringing treasures to the temple.\n\nThis cave is an ancient shrine! And at the back of the cave, you see an opening leading deeper into the mountain...`,
+				challenge: {
+					type: "verb_form",
+					instruction: "What is the correct form? 'The paintings _____ us the way to the temple.'",
+					hint: "This action started in the past and is still relevant now",
+					options: [
+						"A) showed",
+						"B) have shown",
+						"C) are showing"
+					],
+					correct: 1,
+					explanation: "Correct! 'Have shown' (Present Perfect) is best because the effect is still relevant now."
+				},
+				choices: [
+					{ text: "🕳️ Follow the opening deeper into the mountain", next: "temple_entrance" }
+				]
+			},
+
+			camp_night: {
+				title: "The Night in Camp",
+				text: `You set up camp near the waterfall. It's a beautiful, peaceful place.\n\nThat night, while you're sleeping, something extraordinary happens. A storm rolls in, and lightning strikes the area near the waterfall.\n\nWhen morning comes, you discover the storm has washed away earth from behind the waterfall. Now you can see an entrance to a massive underground chamber!\n\nFortune has smiled upon you!`,
+				choices: [
+					{ text: "🌟 Explore the chamber immediately", next: "temple_entrance" }
+				]
+			},
+
+			wrong_turn: {
+				title: "A Misleading Path",
+				text: `The fresher carvings lead you down a false path – probably created by someone else searching for the temple.\n\nAfter an hour of walking, you reach a dead end at a cliff face.\n\nYou're disappointed, but Marcelo isn't discouraged. "We learn from mistakes," he says. "Let's go back and take the other path. The real treasure requires patience."\n\nHe's right. You turn back and find the correct way...`,
+				choices: [
+					{ text: "🦁 Follow the ancient path to the temple", next: "temple_entrance" }
+				]
+			},
+
+			temple_entrance: {
+				title: "The Lost Temple",
+				text: `You stand before the Temple of the Lost Jaguar.\n\nIt's more magnificent than you imagined. The pyramid rises majestically through the jungle canopy. Intricate carvings of jaguars, birds, and stars cover every surface.\n\nYour eyes fill with tears. After five years of searching, countless setbacks, and difficult decisions, you've finally reached your goal.\n\nBut there's one final challenge. At the entrance, you see an ancient stone door with three symbols. The door is locked, and your research suggests you must choose the correct symbol to enter.`,
+				challenge: {
+					type: "reading_comprehension",
+					instruction: "Based on the story, which symbol should you choose?",
+					hint: "Remember what was described as a protective spirit throughout the story",
+					options: [
+						"A) The Jaguar (the protective spirit mentioned earlier)",
+						"B) The Pyramid (the main structure of the temple)",
+						"C) The Eagle (a powerful bird in Mayan culture)"
+					],
+					correct: 0,
+					explanation: "Correct! The jaguar was described as a protective spirit throughout the story."
+				},
+				choices: [
+					{ text: "🐆 Choose the Jaguar symbol", next: "success_ending" },
+					{ text: "🏛️ Choose the Pyramid symbol", next: "locked_ending" },
+					{ text: "🦅 Choose the Eagle symbol", next: "locked_ending" }
+				]
+			},
+
+			success_ending: {
+				title: "SUCCESS! 🏛️",
+				text: `The stone door slides open with a deep rumbling sound.\n\nYour team enters the temple. Inside, you discover:\n\n✦ Ancient gold artifacts\n✦ Jade sculptures of jaguars\n✦ Walls covered with Mayan hieroglyphics\n✦ A central chamber with astronomical charts\n\nYour discovery will change our understanding of Mayan civilization!\n\nYou take photos and carefully document everything. News of your discovery spreads around the world.\n\n🎉 THE END 🎉\n\nYour adventure was successful! ¡Felicidades!`,
+				choices: [
+					{ text: "🔄 Play again", next: "start" }
+				],
+				ending: "success"
+			},
+
+			locked_ending: {
+				title: "Locked Out",
+				text: `You choose the wrong symbol.\n\nThe stone door doesn't open. Instead, the ground beneath your feet starts to shake.\n\n"We need to leave NOW!" Marcelo shouts.\n\nYour team runs from the temple as parts of the ceiling begin to crumble. You escape with your lives, but the temple entrance collapses behind you.\n\nYou've found the Temple, but the secrets remain hidden.\n\n⚠️ THE END ⚠️\n\nTry again to unlock all the secrets!`,
+				choices: [
+					{ text: "🔄 Play again", next: "start" }
+				],
+				ending: "incomplete"
+			}
+		};
+
+		// Sound effects using Web Audio API
+		const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+		function playSound(type) {
+			if (gameState.difficulty === 'normal' || true) { // Always play sounds
+				const now = audioContext.currentTime;
+				const osc = audioContext.createOscillator();
+				const gain = audioContext.createGain();
+				osc.connect(gain);
+				gain.connect(audioContext.destination);
+
+				if (type === 'correct') {
+					osc.frequency.setValueAtTime(800, now);
+					osc.frequency.setValueAtTime(1000, now + 0.1);
+					gain.gain.setValueAtTime(0.3, now);
+					gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+					osc.start(now);
+					osc.stop(now + 0.3);
+				} else if (type === 'incorrect') {
+					osc.frequency.setValueAtTime(400, now);
+					osc.frequency.setValueAtTime(300, now + 0.1);
+					gain.gain.setValueAtTime(0.2, now);
+					gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+					osc.start(now);
+					osc.stop(now + 0.2);
+				} else if (type === 'success') {
+					osc.frequency.setValueAtTime(600, now);
+					osc.frequency.setValueAtTime(800, now + 0.1);
+					osc.frequency.setValueAtTime(1000, now + 0.2);
+					gain.gain.setValueAtTime(0.3, now);
+					gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+					osc.start(now);
+					osc.stop(now + 0.4);
+				}
+			}
+		}
+
+		function createParticles(x, y, emoji) {
+			for (let i = 0; i < 5; i++) {
+				const particle = document.createElement('div');
+				particle.className = 'particle';
+				particle.textContent = emoji;
+				particle.style.left = x + 'px';
+				particle.style.top = y + 'px';
+				particle.style.setProperty('--tx', (Math.random() - 0.5) * 100 + 'px');
+				document.body.appendChild(particle);
+
+				setTimeout(() => particle.remove(), 1000);
+			}
+		}
+
+		function updateStats() {
+			document.getElementById('correct-count').textContent = gameState.correctAnswers;
+			const progress = Math.round((gameState.visitedPassages.size / Object.keys(passages).length) * 100);
+			document.getElementById('progress-count').textContent = progress;
+			document.getElementById('progress-bar').style.width = progress + '%';
+		}
+
+		function revealText(element, text, speed = 30) {
+			element.innerHTML = '';
+			let index = 0;
+
+			function typeChar() {
+				if (index < text.length) {
+					// Check for <br> tag
+					if (text.substr(index, 4) === '<br>') {
+						const br = document.createElement('br');
+						element.appendChild(br);
+						index += 4;
+					} else {
+						const char = text[index];
+						if (char === '\n') {
+							const br = document.createElement('br');
+							element.appendChild(br);
+						} else {
+							const span = document.createElement('span');
+							span.className = 'char';
+							span.textContent = char;
+							span.style.animationDelay = (index * speed) + 'ms';
+							element.appendChild(span);
+						}
+						index++;
+					}
+					setTimeout(typeChar, speed);
+				}
+			}
+
+			typeChar();
+		}
+
+		function unlockAchievement(name, emoji) {
+			if (!gameState.achievements.includes(name)) {
+				gameState.achievements.push(name);
+				const achievementsDiv = document.getElementById('achievements');
+				const badge = document.createElement('div');
+				badge.className = 'achievement';
+				badge.innerHTML = `<span class="achievement-icon">${emoji}</span> ${name}`;
+				achievementsDiv.appendChild(badge);
+				playSound('success');
+			}
+		}
+
+		function displayPassage(key) {
+			gameState.currentPassage = key;
+			gameState.visitedPassages.add(key);
+			const passage = passages[key];
+			const passageDiv = document.getElementById("passage");
+
+			let html = `<h1>${passage.title}</h1>`;
+			html += `<div class="passage-text"></div>`;
+
+			if (passage.challenge) {
+				gameState.currentChallenge = passage.challenge;
+				gameState.totalChallenges++;
+
+				html += `<div class="language-challenge">
+					<strong>📚 Language Challenge:</strong><br>
+					<em>${passage.challenge.instruction}</em>`;
+
+				if (gameState.difficulty === 'easy') {
+					html += `<br><em style="font-size: 0.9em; color: #d4a574;">💡 Hint: ${passage.challenge.hint}</em>`;
+				}
+
+				html += `<br><br><div id="challenge-options">`;
+				passage.challenge.options.forEach((option, index) => {
+					html += `<button class="challenge-btn" data-answer="${index}">${option}</button><br>`;
+				});
+				html += `</div><div id="challenge-feedback"></div></div>`;
+			}
+			html += `<div class="choices">`;
+			passage.choices.forEach(choice => {
+				html += `<button class="choice" data-next="${choice.next}">${choice.text}</button>`;
+			});
+			html += `</div>`;
+
+			passageDiv.innerHTML = html;
+			passageDiv.scrollTop = 0;
+
+			// Animate text reveal
+			setTimeout(() => {
+				revealText(document.querySelector('.passage-text'), passage.text.replace(/\n/g, '<br>'), 15);
+			}, 300);
+
+			// Attach event listeners
+			if (passage.challenge) {
+				document.querySelectorAll('.challenge-btn').forEach(btn => {
+					btn.addEventListener('click', handleChallengeAnswer);
+				});
+			} else {
+				const choicesDiv = document.querySelector('.choices');
+				if (choicesDiv) {
+					choicesDiv.classList.add('revealed');
+				}
+			}
+
+			// Attach choice listeners
+			document.querySelectorAll('.choice').forEach(btn => {
+				btn.addEventListener('click', function() {
+					const nextKey = this.getAttribute('data-next');
+					displayPassage(nextKey);
+				});
+			});
+
+			updateStats();
+		}
+
+		function handleChallengeAnswer(event) {
+			if (!gameState.currentChallenge) return;
+
+			const selected = parseInt(event.target.getAttribute('data-answer'));
+			const correct = gameState.currentChallenge.correct;
+			const explanation = gameState.currentChallenge.explanation;
+			const feedbackDiv = document.getElementById('challenge-feedback');
+			const buttons = document.querySelectorAll('.challenge-btn');
+			const choicesDiv = document.querySelector('.choices');
+
+			if (selected === correct) {
+				// Correct answer
+				gameState.correctAnswers++;
+				buttons.forEach((btn) => {
+					btn.disabled = true;
+					const btnAnswer = parseInt(btn.getAttribute('data-answer'));
+					if (btnAnswer === correct) {
+						btn.classList.add('correct');
+					}
+				});
+
+				feedbackDiv.innerHTML = `<div class="feedback correct">✓ ${explanation}</div>`;
+				playSound('correct');
+				createParticles(event.clientX, event.clientY, '✓');
+
+				// Reveal choices after delay
+				setTimeout(() => {
+					if (choicesDiv) {
+						choicesDiv.classList.add('revealed');
+					}
+				}, 800);
+
+				// Check for achievement
+				if (gameState.correctAnswers === gameState.totalChallenges) {
+					unlockAchievement('Perfect Run! 🎯', '🎯');
+				}
+			} else {
+				// Incorrect answer
+				event.target.classList.add('incorrect');
+				feedbackDiv.innerHTML = `<div class="feedback incorrect">✗ Try again!</div>`;
+				playSound('incorrect');
+
+				setTimeout(() => {
+					event.target.classList.remove('incorrect');
+				}, 600);
+			}
+
+			updateStats();
+		}
+
+		function startGame(difficulty) {
+			gameState.difficulty = difficulty;
+			gameState.correctAnswers = 0;
+			gameState.totalChallenges = 0;
+			gameState.achievements = [];
+			gameState.visitedPassages.clear();
+
+			document.getElementById('difficulty-modal').classList.remove('show');
+			displayPassage('start');
+		}
+
+		// Initialize game
+		document.getElementById('difficulty-modal').classList.add('show');
+	</script>
+</body>
+</html>
